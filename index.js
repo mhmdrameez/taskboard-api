@@ -3,8 +3,10 @@ const crypto = require('crypto');
 const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
+const path = require('path');
 
-const swaggerDocument = YAML.load('./swagger.yaml');
+
+const swaggerDocument = YAML.load(path.join(__dirname, 'swagger.yaml'));
 
 const app = express();
 app.use(cors());
@@ -13,6 +15,10 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // In-memory data store
 let tasks = [];
+
+app.get('/', (req, res) => {
+    res.json({ message: 'TaskBoard API Running 🚀' });
+});
 
 // GET /tasks: Return all tasks (paginated by status)
 app.get('/tasks', (req, res) => {
